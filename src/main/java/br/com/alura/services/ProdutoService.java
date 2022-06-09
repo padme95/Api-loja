@@ -1,6 +1,7 @@
 package br.com.alura.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,24 @@ public class ProdutoService {
 		produtoRepository.deleteById(id);
 	}
 	
-	public ProdutoEntity update(int id, ProdutoEntity produto) {
-		ProdutoEntity produtoAtual = produtoRepository.findById(id).get();
-		produtoAtual.setNome(produto.getNome());
-		return produtoRepository.save(produtoAtual);
+	public ProdutoEntity update(int id, ProdutoEntity novoProduto) {
+		
+		Optional<ProdutoEntity> optional = produtoRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			ProdutoEntity produto = optional.get();
+			produto.setDescricao(novoProduto.getDescricao());
+			produto.setNome(novoProduto.getNome());
+			produto.setPreco(novoProduto.getPreco());
+			return produtoRepository.save(produto);
+		}else {
+			return new ProdutoEntity();
+		}		
 	}
+	
+	
+	
+//	ProdutoEntity produtoAtual = produtoRepository.findById(id).get();
+//	produtoAtual.setNome(produto.getNome());
+//	return produtoRepository.save(produtoAtual);
 }
